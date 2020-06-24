@@ -1,0 +1,22 @@
+{
+  "name": "dexlog",
+  "version": "1.0.0",
+  "description": "a logger for developers",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prebuild": "rm -r dist",
+    "build": "tsc",
+    "test": "jest",
+    "benchmark": "ts-node ./benchmark.ts"
+  },
+  "author": "Peter McIntyre",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^26.0.1",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.8.3"
+  }
+}
