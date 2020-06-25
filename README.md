@@ -1,8 +1,19 @@
-# Logger
+# dexlog
 
-This is a low-frills, zero-dependency logger, with a focus on good developer experience.
+Zero-dependency logging with a focus on developer experience and modern backend runtimes.
 
-By default it serializes to JSON and writes to stdout with RFC3339 timestamp, but you can bring your own serializer / writer.
+## Use-cases
+
+When you're developering for NodeJS (ie. not browsers) on a modern runtime (ie. FaaS / Lambda / containers) and you care about structured logs (ie. as JSON)
+
+## Features
+
+- JSON formatted logs
+- Timestamp with RFC3339
+- Writes to std out
+- Easy to emit with context
+- Typescript
+- Extensible
 
 ## Install
 
@@ -14,6 +25,13 @@ npm i --save dexlog
 
 ```TypeScript
 import { StandardLogger } from "dexlog"
+```
+
+OR
+
+```TypeScript
+import { LogLevel, Logger } from "dexlog"
+const logger = new Logger( LogLevel.DEBUG )
 ```
 
 ## Usage
@@ -64,10 +82,11 @@ $ LOG_LEVEL=INFO node .
 ```
 
 OR:  
+
 you can set it programmatically:
 
 ```TypeScript
-import { LogLevel, Logger, Writer } from "./logger"
+import { LogLevel, Logger, Writer } from "dexlog"
 const logger = new Logger( LogLevel.DEBUG )
 ```
 

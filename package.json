@@ -2,6 +2,13 @@
   "name": "dexlog",
   "version": "1.0.0",
   "description": "a logger for developers",
+  "keywords": [
+    "log",
+    "logger",
+    "logging",
+    "structured",
+    "json"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
