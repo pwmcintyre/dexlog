@@ -2,6 +2,11 @@
   "name": "dexlog",
   "version": "1.0.0",
   "description": "a logger for developers",
+  "homepage": "https://github.com/pwmcintyre/dexlog",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/pwmcintyre/dexlog"
+  },
   "keywords": [
     "log",
     "logger",

@@ -23,13 +23,13 @@ npm i --save dexlog
 
 ## Import
 
-```TypeScript
+```JavaScript
 import { StandardLogger } from "dexlog"
 ```
 
 OR
 
-```TypeScript
+```JavaScript
 import { LogLevel, Logger } from "dexlog"
 const logger = new Logger( LogLevel.DEBUG )
 ```
@@ -38,21 +38,21 @@ const logger = new Logger( LogLevel.DEBUG )
 
 ### Basic
 
-```TypeScript
+```JavaScript
 StandardLogger.info( "this is information" )
 // > {"message":"this is information","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### With context
 
-```TypeScript
+```JavaScript
 StandardLogger.error( "failed to do the thing", { error } )
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 OR
 
-```TypeScript
+```JavaScript
 StandardLogger.with({ error }).error( "failed to do the thing" )
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
@@ -61,7 +61,7 @@ StandardLogger.with({ error }).error( "failed to do the thing" )
 
 You can keep context for re-use
 
-```TypeScript
+```JavaScript
 const user_id = "dave"
 
 // you can create context loggers
@@ -85,7 +85,7 @@ OR:
 
 you can set it programmatically:
 
-```TypeScript
+```JavaScript
 import { LogLevel, Logger, Writer } from "dexlog"
 const logger = new Logger( LogLevel.DEBUG )
 ```
@@ -94,7 +94,7 @@ const logger = new Logger( LogLevel.DEBUG )
 
 Lets say you are using lambda, you might want to add context to your logger like this:
 
-```TypeScript
+```JavaScript
 export async function lambda_handler( event: any, context: LambdaContext ): Promise<any> {
 
     const logger = StandardLogger.with({ request_id: context.awsRequestId })
@@ -113,12 +113,12 @@ Most of the time you'll want to use the StandardLogger, but just in case you nee
 You can bring a writer, it just has to be a function which takes an object and returns nothing.
 
 Interface:
-```TypeScript
+```JavaScript
 export type Writer = (msg: any) => void
 ```
 
 Example implementation which writes to S3:
-```TypeScript
+```JavaScript
 // S3Writer writes to S3
 class S3Writer {
     constructor(
@@ -139,12 +139,12 @@ const logger = new Logger( LogLevel.INFO, writer.write )
 A Serializer takes anything and returns a string.
 
 Interface:
-```TypeScript
+```JavaScript
 export type Serializer = (msg: any) => string
 ```
 
 Example implementation which returns everything in CAPS!
-```TypeScript
+```JavaScript
 const AngrySerializer: Serializer = (msg: any) => JSON.stringify(msg).toUpperCase()
 const logger = new Logger( LogLevel.DEBUG, StdOutWriter, AngrySerializer )
 logger.error("what?!") // {"MESSAGE":"WHAT?!","LEVEL":"ERROR","TIMESTAMP":"2020-06-23T10:02:03.765Z"}
@@ -156,13 +156,13 @@ A Stamper returns an object which is appended to your log.
 
 Interface:
 
-```TypeScript
+```JavaScript
 export type Stamper = () => any
 ```
 
 Example implementation which stamps messages with "foo" and a backwards timestamp:
 
-```TypeScript
+```JavaScript
 // timestamper
 const locale = new Intl.DateTimeFormat('en-US', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/New_York' })
 const FreedomStamper: Stamper = () => ({ time: locale.format(new Date()) })
