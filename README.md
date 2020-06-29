@@ -39,6 +39,7 @@ const logger = new Logger( LogLevel.DEBUG )
 ### Basic
 
 ```js
+import { StandardLogger } from "dexlog"
 StandardLogger.info( "this is information" )
 // > {"message":"this is information","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
@@ -46,6 +47,7 @@ StandardLogger.info( "this is information" )
 ### With context
 
 ```js
+import { StandardLogger } from "dexlog"
 StandardLogger.error( "failed to do the thing", { error } )
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
@@ -53,6 +55,7 @@ StandardLogger.error( "failed to do the thing", { error } )
 OR
 
 ```js
+import { StandardLogger } from "dexlog"
 StandardLogger.with({ error }).error( "failed to do the thing" )
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
@@ -62,6 +65,8 @@ StandardLogger.with({ error }).error( "failed to do the thing" )
 You can keep context for re-use
 
 ```js
+import { StandardLogger } from "dexlog"
+
 const user_id = "dave"
 
 // you can create context loggers
@@ -86,7 +91,7 @@ OR:
 you can set it programmatically:
 
 ```js
-import { LogLevel, Logger, Writer } from "dexlog"
+import { LogLevel, Logger } from "dexlog"
 const logger = new Logger( LogLevel.DEBUG )
 ```
 
@@ -95,6 +100,7 @@ const logger = new Logger( LogLevel.DEBUG )
 Lets say you are using lambda, you might want to add context to your logger like this:
 
 ```js
+import { StandardLogger } from "dexlog"
 export async function lambda_handler( event: any, context: LambdaContext ): Promise<any> {
 
     const logger = StandardLogger.with({ request_id: context.awsRequestId })
@@ -119,6 +125,7 @@ export type Writer = (msg: any) => void
 
 Example implementation which writes to S3:
 ```js
+import { LogLevel, Logger, Writer } from "dexlog"
 // S3Writer writes to S3
 class S3Writer {
     constructor(
@@ -140,11 +147,13 @@ A Serializer takes anything and returns a string.
 
 Interface:
 ```js
+import { Serializer } from "dexlog"
 export type Serializer = (msg: any) => string
 ```
 
 Example implementation which returns everything in CAPS!
 ```js
+import { LogLevel, Logger, StdOutWriter, Serializer } from "dexlog"
 const AngrySerializer: Serializer = (msg: any) => JSON.stringify(msg).toUpperCase()
 const logger = new Logger( LogLevel.DEBUG, StdOutWriter, AngrySerializer )
 logger.error("what?!") // {"MESSAGE":"WHAT?!","LEVEL":"ERROR","TIMESTAMP":"2020-06-23T10:02:03.765Z"}
@@ -163,15 +172,25 @@ export type Stamper = () => any
 Example implementation which stamps messages with "foo" and a backwards timestamp:
 
 ```js
+import { DefaultSerializer, Logger, LogLevel, Stamper, StdOutWriter } from "dexlog"
+
 // timestamper
-const locale = new Intl.DateTimeFormat('en-US', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/New_York' })
+const locale = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZone: 'America/New_York',
+})
 const FreedomStamper: Stamper = () => ({ time: locale.format(new Date()) })
 
 // foo stamper
 const FooStamper: Stamper = () => ({ foo: "bar" })
 
 // logger
-const logger = new Logger( LogLevel.DEBUG, StdOutWriter, DefaultSerializer, [FreedomStamper,FooStamper] )
+const logger = new Logger( LogLevel.DEBUG, StdOutWriter, DefaultSerializer, [FreedomStamper, FooStamper] )
 
 // usage
 logger.info("Hello, sir") // {"message":"Hello, World!","level":"INFO","time":"6/23/2020","foo":"bar"}
