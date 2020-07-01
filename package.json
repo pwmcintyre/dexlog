@@ -1,8 +1,10 @@
 {
   "name": "dexlog",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "a logger for developers",
   "homepage": "https://github.com/pwmcintyre/dexlog",
+  "author": "Peter McIntyre",
+  "license": "MIT",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/pwmcintyre/dexlog"
@@ -16,14 +18,14 @@
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
     "prebuild": "rm -r dist",
     "build": "tsc",
     "test": "jest",
-    "benchmark": "ts-node ./benchmark.ts"
+    "benchmark": "ts-node ./benchmark.ts",
+    "prepare" : "npm run build"
   },
-  "author": "Peter McIntyre",
-  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^26.0.1",
     "jest": "^26.1.0",
