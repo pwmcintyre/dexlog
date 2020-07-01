@@ -8,9 +8,9 @@ When you're developering for NodeJS (ie. not browsers) on a modern runtime (ie. 
 
 ## Features
 
-- JSON formatted logs
-- Timestamp with RFC3339
-- Writes to std out
+- Serialized to JSON (by default)
+- Stamped with RFC3339 (by default)
+- Writes to stdout (by default)
 - Easy to emit with context
 - Typescript
 - Extensible
