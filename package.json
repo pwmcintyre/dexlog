@@ -1,6 +1,6 @@
 {
   "name": "dexlog",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "a logger for developers",
   "homepage": "https://github.com/pwmcintyre/dexlog",
   "author": "Peter McIntyre",
@@ -20,7 +20,7 @@
   "types": "dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
-    "prebuild": "rm -r dist",
+    "prebuild": "rm -rf dist",
     "build": "tsc",
     "test": "jest",
     "benchmark": "ts-node ./benchmark.ts",
