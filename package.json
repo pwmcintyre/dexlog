@@ -20,7 +20,7 @@
   "types": "dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
-    "prebuild": "rm -r dist",
+    "prebuild": "rm -rf dist",
     "build": "tsc",
     "test": "jest",
     "benchmark": "ts-node ./benchmark.ts",
