@@ -46,7 +46,7 @@ export class Logger {
     private context: any
 
     constructor(
-        private readonly Level: LogLevel = LogLevel.INFO,
+        private readonly level: LogLevel = LogLevel.INFO,
         private readonly write: Writer = StdOutWriter,
         private readonly serialize: Serializer = DefaultSerializer,
         private readonly stamps: Stamper[] = [RFC3339Stamper],
@@ -66,7 +66,7 @@ export class Logger {
     }
     public log(level: LogLevel, message: string, extra?: any): void {
 
-        if ( level < this.Level ) {
+        if ( level < this.level ) {
             return
         }
 
@@ -89,7 +89,7 @@ export class Logger {
 
     // create a new logger, copy this loggers context merged with any new context
     public with(context: any): Logger {
-        const l = new Logger( this.Level, this.write, this.serialize, this.stamps )
+        const l = new Logger( this.level, this.write, this.serialize, this.stamps )
         l.context = { ...this.context, ...context }
         return l
     }
