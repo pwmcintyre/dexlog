@@ -1,36 +1,41 @@
 {
-  "name": "dexlog",
-  "version": "1.0.7",
-  "description": "a logger for developers",
-  "homepage": "https://github.com/pwmcintyre/dexlog",
-  "author": "Peter McIntyre",
-  "license": "MIT",
-  "repository": {
-    "type" : "git",
-    "url" : "https://github.com/pwmcintyre/dexlog"
-  },
-  "keywords": [
-    "log",
-    "logger",
-    "logging",
-    "structured",
-    "json"
-  ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": ["dist"],
-  "scripts": {
-    "prebuild": "rm -rf dist",
-    "build": "tsc",
-    "test": "jest",
-    "benchmark": "ts-node ./benchmark.ts",
-    "prepare" : "npm run build"
-  },
-  "devDependencies": {
-    "@types/jest": "^26.0.1",
-    "jest": "^26.1.0",
-    "ts-jest": "^26.1.1",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.8.3"
-  }
+    "name": "dexlog",
+    "version": "1.0.7",
+    "description": "a logger for developers",
+    "homepage": "https://github.com/pwmcintyre/dexlog",
+    "author": "Peter McIntyre",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pwmcintyre/dexlog"
+    },
+    "keywords": [
+        "log",
+        "logger",
+        "logging",
+        "structured",
+        "json"
+    ],
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "clean": "rm -rf dist",
+        "lint": "prettier --write .",
+        "test": "jest",
+        "prebuild": "npm run clean && npm run lint && npm run test",
+        "build": "tsc",
+        "benchmark": "ts-node ./benchmark.ts",
+        "prepare": "npm run build"
+    },
+    "devDependencies": {
+        "@types/jest": "^26.0.1",
+        "jest": "^26.1.0",
+        "prettier": "2.0.5",
+        "ts-jest": "^26.1.1",
+        "ts-node": "^8.10.2",
+        "typescript": "^3.8.3"
+    }
 }

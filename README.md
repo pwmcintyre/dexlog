@@ -8,12 +8,12 @@ When you're developering for NodeJS (ie. not browsers) on a modern runtime (ie. 
 
 ## Features
 
-- Serialized to JSON (by default)
-- Stamped with RFC3339 (by default)
-- Writes to stdout (by default)
-- Easy to emit with context
-- Typescript
-- Extensible
+-   Serialized to JSON (by default)
+-   Stamped with RFC3339 (by default)
+-   Writes to stdout (by default)
+-   Easy to emit with context
+-   Typescript
+-   Extensible
 
 ## Install
 
@@ -24,14 +24,14 @@ npm i --save dexlog
 ## Import
 
 ```js
-import { StandardLogger } from "dexlog"
+import { StandardLogger } from 'dexlog'
 ```
 
 OR
 
 ```js
-import { LogLevel, Logger } from "dexlog"
-const logger = new Logger( LogLevel.DEBUG )
+import { LogLevel, Logger } from 'dexlog'
+const logger = new Logger(LogLevel.DEBUG)
 ```
 
 ## Usage
@@ -39,24 +39,24 @@ const logger = new Logger( LogLevel.DEBUG )
 ### Basic
 
 ```js
-import { StandardLogger } from "dexlog"
-StandardLogger.info( "this is information" )
+import { StandardLogger } from 'dexlog'
+StandardLogger.info('this is information')
 // > {"message":"this is information","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### With context
 
 ```js
-import { StandardLogger } from "dexlog"
-StandardLogger.error( "failed to do the thing", { error } )
+import { StandardLogger } from 'dexlog'
+StandardLogger.error('failed to do the thing', { error })
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 OR
 
 ```js
-import { StandardLogger } from "dexlog"
-StandardLogger.with({ error }).error( "failed to do the thing" )
+import { StandardLogger } from 'dexlog'
+StandardLogger.with({ error }).error('failed to do the thing')
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
@@ -65,15 +65,15 @@ StandardLogger.with({ error }).error( "failed to do the thing" )
 You can keep context for re-use
 
 ```js
-import { StandardLogger } from "dexlog"
+import { StandardLogger } from 'dexlog'
 
-const user_id = "dave"
+const user_id = 'dave'
 
 // you can create context loggers
 const contextlogger = StandardLogger.with({ user_id })
 
 // then use as per normal
-contextlogger.info( "did a thing" )
+contextlogger.info('did a thing')
 // > {"message":"did a thing","level":"INFO","user_id":"dave"}
 ```
 
@@ -86,13 +86,13 @@ The `StandardLogger` uses the environment level "LOG_LEVEL" - set it as needed:
 $ LOG_LEVEL=INFO node .
 ```
 
-OR:  
+OR:
 
 you can set it programmatically:
 
 ```js
-import { LogLevel, Logger } from "dexlog"
-const logger = new Logger( LogLevel.DEBUG )
+import { LogLevel, Logger } from 'dexlog'
+const logger = new Logger(LogLevel.DEBUG)
 ```
 
 ## Practical use-case
@@ -100,13 +100,11 @@ const logger = new Logger( LogLevel.DEBUG )
 Lets say you are using lambda, you might want to add context to your logger like this:
 
 ```js
-import { StandardLogger } from "dexlog"
-export async function lambda_handler( event: any, context: LambdaContext ): Promise<any> {
-
+import { StandardLogger } from 'dexlog'
+export async function lambda_handler(event: any, context: LambdaContext): Promise<any> {
     const logger = StandardLogger.with({ request_id: context.awsRequestId })
 
-    logger.debug( "event recieved", { event })
-
+    logger.debug('event recieved', { event })
 }
 ```
 
@@ -119,11 +117,13 @@ Most of the time you'll want to use the StandardLogger, but just in case you nee
 You can bring a writer, it just has to be a function which takes an object and returns nothing.
 
 Interface:
+
 ```js
 export type Writer = (msg: any) => void
 ```
 
 Example implementation which writes to S3:
+
 ```js
 import { LogLevel, Logger, Writer } from "dexlog"
 // S3Writer writes to S3
@@ -146,17 +146,19 @@ const logger = new Logger( LogLevel.INFO, writer.write )
 A Serializer takes anything and returns a string.
 
 Interface:
+
 ```js
-import { Serializer } from "dexlog"
+import { Serializer } from 'dexlog'
 export type Serializer = (msg: any) => string
 ```
 
 Example implementation which returns everything in CAPS!
+
 ```js
-import { LogLevel, Logger, StdOutWriter, Serializer } from "dexlog"
+import { LogLevel, Logger, StdOutWriter, Serializer } from 'dexlog'
 const AngrySerializer: Serializer = (msg: any) => JSON.stringify(msg).toUpperCase()
-const logger = new Logger( LogLevel.DEBUG, StdOutWriter, AngrySerializer )
-logger.error("what?!") // {"MESSAGE":"WHAT?!","LEVEL":"ERROR","TIMESTAMP":"2020-06-23T10:02:03.765Z"}
+const logger = new Logger(LogLevel.DEBUG, StdOutWriter, AngrySerializer)
+logger.error('what?!') // {"MESSAGE":"WHAT?!","LEVEL":"ERROR","TIMESTAMP":"2020-06-23T10:02:03.765Z"}
 ```
 
 ### Custom Stampers
@@ -172,7 +174,7 @@ export type Stamper = () => any
 Example implementation which stamps messages with "foo" and a backwards timestamp:
 
 ```js
-import { DefaultSerializer, Logger, LogLevel, Stamper, StdOutWriter } from "dexlog"
+import { DefaultSerializer, Logger, LogLevel, Stamper, StdOutWriter } from 'dexlog'
 
 // timestamper
 const locale = new Intl.DateTimeFormat('en-US', {
@@ -187,11 +189,14 @@ const locale = new Intl.DateTimeFormat('en-US', {
 const FreedomStamper: Stamper = () => ({ time: locale.format(new Date()) })
 
 // foo stamper
-const FooStamper: Stamper = () => ({ foo: "bar" })
+const FooStamper: Stamper = () => ({ foo: 'bar' })
 
 // logger
-const logger = new Logger( LogLevel.DEBUG, StdOutWriter, DefaultSerializer, [FreedomStamper, FooStamper] )
+const logger = new Logger(LogLevel.DEBUG, StdOutWriter, DefaultSerializer, [
+    FreedomStamper,
+    FooStamper,
+])
 
 // usage
-logger.info("Hello, sir") // {"message":"Hello, World!","level":"INFO","time":"6/23/2020","foo":"bar"}
+logger.info('Hello, sir') // {"message":"Hello, World!","level":"INFO","time":"6/23/2020","foo":"bar"}
 ```

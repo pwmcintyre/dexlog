@@ -10,7 +10,7 @@ export enum LogLevel {
 // Writer allows consumer to specify their own method of writing
 // eg. they could use a file writer, HTTP streamer, etc
 export type Writer = (msg: any) => void
-export const StdOutWriter = (msg: any) => process.stdout.write(`${ msg }\n`)
+export const StdOutWriter = (msg: any) => process.stdout.write(`${msg}\n`)
 
 // Serializer allows consumer to specify their own method of serializing objects into strings
 export type Serializer = (msg: any) => string
@@ -22,10 +22,10 @@ export const RFC3339Stamper = () => ({ timestamp: new Date().toISOString() })
 
 // getCircularReplacer is Mozilla's suggested approach to dealing with circular references
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value
-function getCircularReplacer () {
+function getCircularReplacer() {
     const seen = new WeakSet()
     return (key: any, value: any) => {
-        if (typeof value === "object" && value !== null) {
+        if (typeof value === 'object' && value !== null) {
             if (seen.has(value)) {
                 return
             }
@@ -41,7 +41,6 @@ function replaceErrors(_: any, value: any) {
 
 // Logger class allows consumer to instantiate a logger with any given level / writer
 export class Logger {
-
     // context holds any extra data to include in all logs from this logger
     private context: any
 
@@ -50,27 +49,26 @@ export class Logger {
         private readonly write: Writer = StdOutWriter,
         private readonly serialize: Serializer = DefaultSerializer,
         private readonly stamps: Stamper[] = [RFC3339Stamper],
-    ) { }
+    ) {}
 
     public debug(message: string, extra?: any): void {
-        return this.log( LogLevel.DEBUG, message, extra )
+        return this.log(LogLevel.DEBUG, message, extra)
     }
     public info(message: string, extra?: any): void {
-        return this.log( LogLevel.INFO, message, extra )
+        return this.log(LogLevel.INFO, message, extra)
     }
     public warn(message: string, extra?: any): void {
-        return this.log( LogLevel.WARN, message, extra )
+        return this.log(LogLevel.WARN, message, extra)
     }
     public error(message: string, extra?: any): void {
-        return this.log( LogLevel.ERROR, message, extra )
+        return this.log(LogLevel.ERROR, message, extra)
     }
     public log(level: LogLevel, message: string, extra?: any): void {
-
-        if ( level < this.level ) {
+        if (level < this.level) {
             return
         }
 
-        const stamps = this.stamps.reduce( (agg, fn) => {
+        const stamps = this.stamps.reduce((agg, fn) => {
             agg = { ...fn(), ...agg }
             return agg
         }, {})
@@ -83,23 +81,21 @@ export class Logger {
             ...extra,
         }
 
-        this.write( this.serialize(log) )
-
+        this.write(this.serialize(log))
     }
 
     // create a new logger, copy this loggers context merged with any new context
     public with(context: any): Logger {
-        const l = new Logger( this.level, this.write, this.serialize, this.stamps )
+        const l = new Logger(this.level, this.write, this.serialize, this.stamps)
         l.context = { ...this.context, ...context }
         return l
     }
-
 }
 
 // parse level from env var and set default logger
-const level = ( process.env.LOG_LEVEL || "INFO" ) as keyof typeof LogLevel
+const level = (process.env.LOG_LEVEL || 'INFO') as keyof typeof LogLevel
 
 // StandardLogger is a globally available Logger with a JSON Serializer, timstamps with RFC3339 timestamps, and writer to std out
-export const StandardLogger = new Logger( LogLevel[level] )
+export const StandardLogger = new Logger(LogLevel[level])
 
 export default Logger
