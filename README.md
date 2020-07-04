@@ -29,16 +29,16 @@ npm i --save dexlog
 ```js
 import { StandardLogger } from 'dexlog'
 
-StandardLogger.debug( "this is for troubleshooting" )
+StandardLogger.debug('this is for troubleshooting')
 // > {"message":"this is for troubleshooting","level":"DEBUG","timestamp":"2020-06-23T06:46:11.799Z"}
 
-StandardLogger.info( "success" )
+StandardLogger.info('success')
 // > {"message":"success","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
 
-StandardLogger.warn( "something happened, but i'm able to continue" )
+StandardLogger.warn("something happened, but i'm able to continue")
 // > {"message":"something happened, but i'm able to continue","level":"WARN","timestamp":"2020-06-23T06:46:11.799Z"}
 
-StandardLogger.error( "failed to do that thing" )
+StandardLogger.error('failed to do that thing')
 // > {"message":"failed to do that thing","level":"ERROR","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
