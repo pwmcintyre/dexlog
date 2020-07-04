@@ -26,12 +26,20 @@ npm i --save dexlog
 
 ## Basic Usage
 
-
 ```js
 import { StandardLogger } from 'dexlog'
 
-StandardLogger.info('this is information')
-// > {"message":"this is information","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
+StandardLogger.debug( "this is for troubleshooting" )
+// > {"message":"this is for troubleshooting","level":"DEBUG","timestamp":"2020-06-23T06:46:11.799Z"}
+
+StandardLogger.info( "success" )
+// > {"message":"success","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
+
+StandardLogger.warn( "something happened, but i'm able to continue" )
+// > {"message":"something happened, but i'm able to continue","level":"WARN","timestamp":"2020-06-23T06:46:11.799Z"}
+
+StandardLogger.error( "failed to do that thing" )
+// > {"message":"failed to do that thing","level":"ERROR","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### ... adding context
