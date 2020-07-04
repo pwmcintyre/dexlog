@@ -60,7 +60,7 @@ const logger = StandardLogger.with({ user_id })
 // use as normal:
 const error = new Error('not found')
 logger.error('failed to log in', { error })
-// > {"message":"failed to log in","level":"INFO","user_id":"dave","timestamp":"2020-06-23T06:46:11.799Z"}
+// > {"message":"failed to log in","level":"ERROR","error":"Error: not found","id":"dave","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### Custom Log Level
