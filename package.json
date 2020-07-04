@@ -22,9 +22,10 @@
         "dist"
     ],
     "scripts": {
-        "clean": "rm -rf dist",
+        "clean": "rm -rf dist coverage",
         "lint": "prettier --write .",
         "test": "jest",
+        "test-coverage": "jest --coverage",
         "prebuild": "npm run clean && npm run lint && npm run test",
         "build": "tsc",
         "benchmark": "ts-node ./benchmark.ts",

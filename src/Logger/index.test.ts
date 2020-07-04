@@ -15,6 +15,10 @@ const NoSerializer: Serializer = (msg: any) => msg
 const FooStamper: Stamper = () => ({ foo: 'bar' })
 const FazStamper: Stamper = () => ({ faz: 'baz' })
 
+test(`should default to INFO level`, async () => {
+    expect(new Logger().level === LogLevel.INFO)
+})
+
 describe(`when emitting logs of each level`, () => {
     test(`should include level in output`, async () => {
         // setup

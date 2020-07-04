@@ -27,12 +27,18 @@ export class Logger {
     private context: any
 
     constructor(
-        private readonly level: LogLevel = LogLevel.INFO,
+        private readonly _level: LogLevel = LogLevel.INFO,
         private readonly write: Writer = StdOutWriter,
         private readonly serialize: Serializer = JSONSerializer,
         private readonly stamps: Stamper[] = [RFC3339Stamper],
     ) {}
 
+    // getters
+    public get level() {
+        return this._level
+    }
+
+    // log level functions
     public debug(message: string, extra?: any): void {
         return this.log(LogLevel.DEBUG, message, extra)
     }
@@ -45,6 +51,8 @@ export class Logger {
     public error(message: string, extra?: any): void {
         return this.log(LogLevel.ERROR, message, extra)
     }
+
+    // log is the main logging function
     public log(level: LogLevel, message: string, extra?: any): void {
         if (level < this.level) {
             return
