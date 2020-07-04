@@ -1,6 +1,6 @@
 {
     "name": "dexlog",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "a logger for developers",
     "homepage": "https://github.com/pwmcintyre/dexlog",
     "author": "Peter McIntyre",
