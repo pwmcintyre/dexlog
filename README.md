@@ -39,24 +39,33 @@ const logger = new Logger(LogLevel.DEBUG)
 ### Basic
 
 ```js
-import { StandardLogger } from 'dexlog'
-StandardLogger.info('this is information')
-// > {"message":"this is information","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
+import { StandardLogger } from "dexlog"
+
+StandardLogger.debug( "this is for troubleshooting" )
+// > {"message":"this is for troubleshooting","level":"DEBUG","timestamp":"2020-06-23T06:46:11.799Z"}
+
+StandardLogger.info( "success" )
+// > {"message":"success","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
+
+StandardLogger.warn( "something happened, but i'm able to continue" )
+// > {"message":"something happened, but i'm able to continue","level":"WARN","timestamp":"2020-06-23T06:46:11.799Z"}
+
+StandardLogger.error( "failed to do that thing" )
+// > {"message":"failed to do that thing","level":"ERROR","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### With context
 
 ```js
-import { StandardLogger } from 'dexlog'
-StandardLogger.error('failed to do the thing', { error })
+const error = new Error("foo")
+StandardLogger.error( "failed to do the thing", { error } )
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 OR
 
 ```js
-import { StandardLogger } from 'dexlog'
-StandardLogger.with({ error }).error('failed to do the thing')
+StandardLogger.with({ error }).error( "failed to do the thing" )
 // > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
@@ -65,9 +74,7 @@ StandardLogger.with({ error }).error('failed to do the thing')
 You can keep context for re-use
 
 ```js
-import { StandardLogger } from 'dexlog'
-
-const user_id = 'dave'
+const user_id = "dave"
 
 // you can create context loggers
 const contextlogger = StandardLogger.with({ user_id })
@@ -80,7 +87,7 @@ contextlogger.info('did a thing')
 ### Custom Log Level
 
 RECOMMENDED:  
-The `StandardLogger` uses the environment level "LOG_LEVEL" - set it as needed:
+The `StandardLogger` uses the environment variable `LOG_LEVEL` - set it as needed:
 
 ```shell
 $ LOG_LEVEL=INFO node .
