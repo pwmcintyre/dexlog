@@ -24,60 +24,36 @@ When you're developering for NodeJS (ie. not browsers) on a modern runtime (ie. 
 npm i --save dexlog
 ```
 
-## Import
+## Basic Usage
+
 
 ```js
 import { StandardLogger } from 'dexlog'
-```
 
-OR
-
-```js
-import { LogLevel, Logger } from 'dexlog'
-const logger = new Logger(LogLevel.DEBUG)
-```
-
-## Usage
-
-### Basic
-
-```js
-import { StandardLogger } from 'dexlog'
 StandardLogger.info('this is information')
 // > {"message":"this is information","level":"INFO","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
-### With context
+### ... adding context
 
 ```js
-import { StandardLogger } from 'dexlog'
-StandardLogger.error('failed to do the thing', { error })
-// > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
+const id = 'foo'
+const error = new Error('not found')
+StandardLogger.error('failed to find the thing', { error, id })
+// > {"message":"failed to find the thing","level":"ERROR","error":"Error: not found","id":"foo","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
-OR
+### ... keeping context
 
 ```js
-import { StandardLogger } from 'dexlog'
-StandardLogger.with({ error }).error('failed to do the thing')
-// > {"message":"failed to do the thing","level":"ERROR","error":"Error: foo","timestamp":"2020-06-23T06:46:11.799Z"}
-```
-
-### Keeping context
-
-You can keep context for re-use
-
-```js
-import { StandardLogger } from 'dexlog'
-
 const user_id = 'dave'
 
 // you can create context loggers
-const contextlogger = StandardLogger.with({ user_id })
+const contextLogger = StandardLogger.with({ user_id })
 
 // then use as per normal
-contextlogger.info('did a thing')
-// > {"message":"did a thing","level":"INFO","user_id":"dave"}
+contextLogger.info('did a thing')
+// > {"message":"did a thing","level":"INFO","user_id":"dave","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### Custom Log Level
