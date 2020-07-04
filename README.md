@@ -45,29 +45,28 @@ StandardLogger.error( "failed to do that thing" )
 ### ... adding context
 
 ```js
-const id = 'foo'
+const user_id = 'dave'
 const error = new Error('not found')
-StandardLogger.error('failed to find the thing', { error, id })
-// > {"message":"failed to find the thing","level":"ERROR","error":"Error: not found","id":"foo","timestamp":"2020-06-23T06:46:11.799Z"}
+StandardLogger.error('failed to log in', { error, user_id })
+// > {"message":"failed to log in","level":"ERROR","error":"Error: not found","id":"dave","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### ... keeping context
 
 ```js
 const user_id = 'dave'
+const logger = StandardLogger.with({ user_id })
 
-// you can create context loggers
-const contextLogger = StandardLogger.with({ user_id })
-
-// then use as per normal
-contextLogger.info('did a thing')
-// > {"message":"did a thing","level":"INFO","user_id":"dave","timestamp":"2020-06-23T06:46:11.799Z"}
+// use as normal:
+const error = new Error('not found')
+logger.error('failed to log in', { error })
+// > {"message":"failed to log in","level":"INFO","user_id":"dave","timestamp":"2020-06-23T06:46:11.799Z"}
 ```
 
 ### Custom Log Level
 
 RECOMMENDED:  
-The `StandardLogger` uses the environment level "LOG_LEVEL" - set it as needed:
+The `StandardLogger` uses the environment variable `LOG_LEVEL` - set it as needed:
 
 ```shell
 $ LOG_LEVEL=INFO node .
@@ -88,9 +87,9 @@ Lets say you are using lambda, you might want to add context to your logger like
 
 ```js
 import { StandardLogger } from 'dexlog'
+
 export async function lambda_handler(event: any, context: LambdaContext): Promise<any> {
     const logger = StandardLogger.with({ request_id: context.awsRequestId })
-
     logger.debug('event recieved', { event })
 }
 ```
