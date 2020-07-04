@@ -1,5 +1,8 @@
 # dexlog
 
+![Coveralls github](https://img.shields.io/coveralls/github/pwmcintyre/dexlog)
+![GitHub](https://img.shields.io/github/license/pwmcintyre/dexlog)
+
 Zero-dependency logging with a focus on developer experience and modern backend runtimes.
 
 ## Use-cases
