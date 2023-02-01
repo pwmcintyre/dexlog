@@ -1,11 +1,16 @@
 import { JSONSerializer } from '.'
 
-describe(`when serializing an error`, () => {
-    const error = new Error('example')
-    const got = JSONSerializer({ error })
-
+describe(`when serializing errors`, () => {
     test('should stringify the error', () => {
+        const got = JSONSerializer({ error: new Error('example') })
         expect(got).toEqual(`{"error":"Error: example"}`)
+    })
+})
+
+describe(`when serializing buffers`, () => {
+    test('should stringify the buffer', () => {
+        const got =  JSONSerializer({ word: Buffer.from('example') })
+        expect(got).toEqual(`{"word":"example"}`)
     })
 })
 

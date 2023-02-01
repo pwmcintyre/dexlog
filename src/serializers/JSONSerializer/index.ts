@@ -13,11 +13,20 @@ function getCircularReplacer() {
             }
             seen.add(value)
         }
-        return replaceErrors(key, value)
+        return toStringers(key, value)
     }
 }
 
-function replaceErrors(_: any, value: any) {
-    if (value instanceof Error) return value.toString()
+// toStringers strigifies some specific types
+function toStringers(_: any, value: any) {
+
+    // error
+    if (value instanceof Error)
+        return value.toString()
+
+    // buffer
+    if (value.type !== undefined && value.type === "Buffer")
+        return Buffer.from(value).toString()
+
     return value
 }
