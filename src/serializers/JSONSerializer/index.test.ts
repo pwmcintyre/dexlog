@@ -14,10 +14,12 @@ describe(`when serializing buffers`, () => {
     })
 })
 
-describe(`when serializing undefined objects`, () => {
-    test('should not attempt to serialize', () => {
-        const got = JSONSerializer(undefined)
-        expect(got).toEqual(undefined)
+describe(`when serializing undefined or null objects`, () => {
+    test.each([
+        [undefined, undefined],
+        [null, 'null'],
+    ])('should not attempt to serialize', (input, expected) => {
+        expect(JSONSerializer(input)).toEqual(expected)
     })
 })
 
