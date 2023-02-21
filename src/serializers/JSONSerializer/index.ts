@@ -19,8 +19,8 @@ function getCircularReplacer() {
 
 // toStringers strigifies some specific types
 function toStringers(_: any, value: any) {
-    // non-null assertion - exit early
-    if (!value) return value
+    // exit early for null and undefined
+    if (value === undefined || value === null) return value
 
     // error
     if (value instanceof Error) return value.toString()
