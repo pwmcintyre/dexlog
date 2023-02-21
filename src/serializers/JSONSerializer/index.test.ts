@@ -9,8 +9,17 @@ describe(`when serializing errors`, () => {
 
 describe(`when serializing buffers`, () => {
     test('should stringify the buffer', () => {
-        const got =  JSONSerializer({ word: Buffer.from('example') })
+        const got = JSONSerializer({ word: Buffer.from('example') })
         expect(got).toEqual(`{"word":"example"}`)
+    })
+})
+
+describe(`when serializing undefined or null objects`, () => {
+    test.each([
+        [undefined, undefined],
+        [null, 'null'],
+    ])('should not attempt to serialize', (input, expected) => {
+        expect(JSONSerializer(input)).toEqual(expected)
     })
 })
 

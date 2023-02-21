@@ -19,14 +19,14 @@ function getCircularReplacer() {
 
 // toStringers strigifies some specific types
 function toStringers(_: any, value: any) {
+    // exit early for null and undefined
+    if (value === undefined || value === null) return value
 
     // error
-    if (value instanceof Error)
-        return value.toString()
+    if (value instanceof Error) return value.toString()
 
     // buffer
-    if (value.type !== undefined && value.type === "Buffer")
-        return Buffer.from(value).toString()
+    if (value.type === 'Buffer') return Buffer.from(value).toString()
 
     return value
 }
