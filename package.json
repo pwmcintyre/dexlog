@@ -24,7 +24,8 @@
     "scripts": {
         "clean": "rm -rf dist coverage",
         "lint": "prettier --write .",
-        "test": "node --require ts-node/register --test ./src/**/*.test.ts",
+        "test": "c8 node --require ts-node/register --test ./src/**/*.test.ts",
+        "test:watch": "node --require ts-node/register --test --watch ./src/**/*.test.ts",
         "prebuild": "npm run clean && npm run lint && npm run test",
         "build": "tsc",
         "benchmark": "ts-node ./benchmark.ts",
@@ -32,6 +33,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.2.1",
+        "c8": "^7.13.0",
         "prettier": "2.0.5",
         "ts-node": "^10.9.1",
         "typescript": "^5.0.4"

@@ -9,5 +9,6 @@
         "esModuleInterop": true,
         "rootDir": "src"
     },
-    "exclude": ["node_modules", "dist", "benchmark.ts", "**/*.test.ts"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["src/**/*.test.ts"]
 }

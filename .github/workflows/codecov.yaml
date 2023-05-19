@@ -12,7 +12,7 @@ jobs:
                   node-version-file: '.nvmrc'
                   registry-url: https://registry.npmjs.org/
             - run: npm install
-            - run: npm run test-coverage
+            - run: npm run test
             - uses: coverallsapp/github-action@master
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
