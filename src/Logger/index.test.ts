@@ -16,14 +16,19 @@ const FooStamper: Stamper = () => ({ foo: 'bar' })
 const FazStamper: Stamper = () => ({ faz: 'baz' })
 
 test(`should default to INFO level`, async () => {
-    expect(new Logger().level === LogLevel.INFO)
+    expect(new Logger({}).level === LogLevel.INFO)
 })
 
 describe(`when emitting logs of each level`, () => {
     test(`should include level in output`, async () => {
         // setup
         const writer = new FakeWriter()
-        const logger = new Logger(LogLevel.DEBUG, writer.write, NoSerializer, [])
+        const logger = new Logger({
+            level: LogLevel.DEBUG,
+            serialize: NoSerializer,
+            write: writer.write,
+            stamps: [],
+        })
 
         // run
         logger.debug('foo')
@@ -39,7 +44,12 @@ describe(`when emitting logs of each level`, () => {
 
 describe(`when setting log level to DEBUG`, () => {
     const writer = new FakeWriter()
-    const logger = new Logger(LogLevel.DEBUG, writer.write, NoSerializer, [])
+    const logger = new Logger({
+        level: LogLevel.DEBUG,
+        serialize: NoSerializer,
+        write: writer.write,
+        stamps: [],
+    })
 
     test(`should log debug logs`, async () => {
         logger.debug('foo')
@@ -49,7 +59,12 @@ describe(`when setting log level to DEBUG`, () => {
 
 describe(`when setting log level to INFO`, () => {
     const writer = new FakeWriter()
-    const logger = new Logger(LogLevel.INFO, writer.write, NoSerializer, [])
+    const logger = new Logger({
+        level: LogLevel.INFO,
+        serialize: NoSerializer,
+        write: writer.write,
+        stamps: [],
+    })
 
     test(`should not log debug logs`, async () => {
         logger.debug('foo')
@@ -59,7 +74,12 @@ describe(`when setting log level to INFO`, () => {
 
 describe(`when adding context to a logger`, () => {
     const writer = new FakeWriter()
-    const logger = new Logger(LogLevel.INFO, writer.write, NoSerializer, [])
+    const logger = new Logger({
+        level: LogLevel.DEBUG,
+        serialize: NoSerializer,
+        write: writer.write,
+        stamps: [],
+    })
     const foologger = logger.with({ foo: 'bar' })
 
     test(`should keep any context from earlier`, () => {
@@ -80,7 +100,12 @@ describe(`when adding context to a logger`, () => {
 
 describe(`when given a "foo" stamper`, () => {
     const writer = new FakeWriter()
-    const logger = new Logger(LogLevel.INFO, writer.write, NoSerializer, [FooStamper])
+    const logger = new Logger({
+        level: LogLevel.DEBUG,
+        serialize: NoSerializer,
+        write: writer.write,
+        stamps: [FooStamper],
+    })
 
     test(`should stamp every message with foo`, () => {
         logger.info('hi')
@@ -90,7 +115,12 @@ describe(`when given a "foo" stamper`, () => {
 
 describe(`when given a "foo" and "faz" stamper`, () => {
     const writer = new FakeWriter()
-    const logger = new Logger(LogLevel.INFO, writer.write, NoSerializer, [FooStamper, FazStamper])
+    const logger = new Logger({
+        level: LogLevel.DEBUG,
+        serialize: NoSerializer,
+        write: writer.write,
+        stamps: [FooStamper, FazStamper],
+    })
 
     test(`should stamp every message with foo and faz`, () => {
         logger.info('hi')
