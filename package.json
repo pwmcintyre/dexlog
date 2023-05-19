@@ -24,8 +24,8 @@
     "scripts": {
         "clean": "rm -rf dist coverage",
         "lint": "prettier --write .",
-        "test": "c8 --reporter=lcov --reporter=text node --require ts-node/register --test ./src/**/*.test.ts",
-        "test:watch": "node --require ts-node/register --test --watch ./src/**/*.test.ts",
+        "test": "c8 --reporter=lcov --reporter=text node --require ts-node/register --test ./src/**/*.test.ts ./src/**/**/*.test.ts",
+        "test:watch": "node --require ts-node/register --test --watch ./src/**/*.test.ts ./src/**/**/*.test.ts",
         "prebuild": "npm run clean && npm run lint && npm run test",
         "build": "tsc",
         "benchmark": "ts-node ./benchmark.ts",
