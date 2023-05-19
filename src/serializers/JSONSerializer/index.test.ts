@@ -6,7 +6,6 @@ describe(`when serializing errors`, () => {
     test('should stringify the error', () => {
         const got = JSONSerializer({ error: new Error('example') })
         assert.strictEqual(got, `{"error":"Error: example"}`)
-        assert.strictEqual(1, 1)
     })
 })
 
