@@ -10,9 +10,9 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version-file: '.nvmrc'
-                  registry-url: https://registry.npmjs.org/
-              env:
-                  NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+            #       registry-url: https://registry.npmjs.org/
+            #   env:
+            #       NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
             - run: npm install
             - run: npm run test
             - uses: coverallsapp/github-action@master
