@@ -13,6 +13,8 @@ jobs:
               with:
                   node-version-file: '.nvmrc'
                   registry-url: https://registry.npmjs.org/
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
             - run: npm install
             - run: npm test
             - run: npm publish --access public
