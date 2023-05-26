@@ -4,7 +4,7 @@ export const JSONSerializer: Serializer = (msg: any) => JSON.stringify(msg, getC
 
 // getCircularReplacer is Mozilla's suggested approach to dealing with circular references
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value
-function getCircularReplacer() {
+export function getCircularReplacer() {
     const seen = new WeakSet()
     return (key: any, value: any) => {
         if (typeof value === 'object' && value !== null) {
@@ -18,7 +18,7 @@ function getCircularReplacer() {
 }
 
 // toStringers strigifies some specific types
-function toStringers(_: any, value: any) {
+export function toStringers(_: any, value: any) {
     // exit early for null and undefined
     if (value === undefined || value === null) return value
 

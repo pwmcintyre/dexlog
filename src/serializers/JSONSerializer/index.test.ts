@@ -1,25 +1,27 @@
+import assert from 'node:assert'
+import { describe, test } from 'node:test'
 import { JSONSerializer } from '.'
 
 describe(`when serializing errors`, () => {
     test('should stringify the error', () => {
         const got = JSONSerializer({ error: new Error('example') })
-        expect(got).toEqual(`{"error":"Error: example"}`)
+        assert.strictEqual(got, `{"error":"Error: example"}`)
     })
 })
 
 describe(`when serializing buffers`, () => {
     test('should stringify the buffer', () => {
         const got = JSONSerializer({ word: Buffer.from('example') })
-        expect(got).toEqual(`{"word":"example"}`)
+        assert.strictEqual(got, `{"word":"example"}`)
     })
 })
 
 describe(`when serializing undefined or null objects`, () => {
-    test.each([
-        [undefined, undefined],
-        [null, 'null'],
-    ])('should not attempt to serialize', (input, expected) => {
-        expect(JSONSerializer(input)).toEqual(expected)
+    test('should not attempt to serialize undefined', () => {
+        assert.strictEqual(JSONSerializer(undefined), undefined)
+    })
+    test('should not attempt to serialize null', () => {
+        assert.strictEqual(JSONSerializer(null), 'null')
     })
 })
 
@@ -32,6 +34,6 @@ describe(`when serializing recursive objects`, () => {
     const got = JSONSerializer(circularReference)
 
     test(`should only serialize an object once`, async () => {
-        expect(got).toEqual(`{"otherData":123,"nested":{}}`)
+        assert.strictEqual(got, `{"otherData":123,"nested":{}}`)
     })
 })
