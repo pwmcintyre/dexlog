@@ -1,73 +1,44 @@
-import { JSONSerializer, Serializer } from '../..';
+import { JSONSerializer, LogLevel, Serializer } from '../..'
 
-// colours enum
 export enum Colours {
-    Reset = '\x1b[0m',
-    Bright = '\x1b[1m',
-    Dim = '\x1b[2m',
-    Underscore = '\x1b[4m',
-    Blink = '\x1b[5m',
-    Reverse = '\x1b[7m',
-    Hidden = '\x1b[8m',
-
-    FgBlack = '\x1b[30m',
-    FgRed = '\x1b[31m',
-    FgGreen = '\x1b[32m',
-    FgYellow = '\x1b[33m',
-    FgBlue = '\x1b[34m',
-    FgMagenta = '\x1b[35m',
-    FgCyan = '\x1b[36m',
-    FgWhite = '\x1b[37m',
-
-    BgBlack = '\x1b[40m',
-    BgRed = '\x1b[41m',
-    BgGreen = '\x1b[42m',
-    BgYellow = '\x1b[43m',
-    BgBlue = '\x1b[44m',
-    BgMagenta = '\x1b[45m',
-    BgCyan = '\x1b[46m',
-    BgWhite = '\x1b[47m'
+    reset = '\u001b[0m',
+    hicolor = '\u001b[1m',
+    underline = '\u001b[4m',
+    inverse = '\u001b[7m',
+    black = '\u001b[30m',
+    red = '\u001b[31m',
+    green = '\u001b[32m',
+    yellow = '\u001b[33m',
+    blue = '\u001b[34m',
+    magenta = '\u001b[35m',
+    cyan = '\u001b[36m',
+    white = '\u001b[37m',
+    bg_black = '\u001b[40m',
+    bg_red = '\u001b[41m',
+    bg_green = '\u001b[42m',
+    bg_yellow = '\u001b[43m',
+    bg_blue = '\u001b[44m',
+    bg_magenta = '\u001b[45m',
+    bg_cyan = '\u001b[46m',
+    bg_white = '\u001b[47m',
 }
 
-// colour level map
-export const LevelColours: Colours[] = [
-    Colours.FgCyan, //debug
-    Colours.FgGreen, //info
-    Colours.FgYellow, //warn
-    Colours.FgRed, //error
-    Colours.FgRed, //fatal
-]
+export const DefaultColourMap: Map<LogLevel, string> = new Map([
+    [LogLevel.DEBUG, Colours.bg_cyan + Colours.black],
+    [LogLevel.INFO, Colours.bg_green + Colours.black],
+    [LogLevel.WARN, Colours.bg_yellow + Colours.black],
+    [LogLevel.ERROR, Colours.bg_red + Colours.black],
+])
 
-const colors = {
-    DEBUG: Colours.FgCyan,
-    INFO: Colours.FgGreen,
-    WARNING: Colours.FgYellow,
-    ERROR: Colours.FgRed,
-    FATAL: Colours.FgRed,
-};
+export function wrap(colour: string, key: string): string {
+    return `${colour}${key}${Colours.reset}`
+}
 
-function getColor(level: string): Colours {
-    switch (level) {
-        case "DEBUG":
-            return Colours.FgCyan
-        case "INFO":
-            return Colours.FgGreen
-        case "WARNING":
-            return Colours.FgYellow
-        case "ERROR":
-            return Colours.FgRed
-        case "FATAL":
-            return Colours.FgRed
-        default:
-            return Colours.Reset;
+export function ConsoleSerializer(mapping: Map<LogLevel, string> = DefaultColourMap): Serializer {
+    const colours: Map<string, string> = new Map(Array.from(mapping.entries()).map(([k, v]) => [LogLevel[k], v]))
+    const mapper = (level: string): string => colours.get(level) || Colours.reset
+    return (msg: any) => {
+        const { level, message, ...rest } = msg
+        return `${wrap(mapper(level), level)} ${message} ${ rest && Object.keys(rest).length ? JSONSerializer(rest) : '' }`
     }
-}
-
-function wrap(colour: Colours, key: string): string {
-    return `${colour}${key}${Colours.Reset}`
-}
-
-export const ConsoleSerializer: Serializer = (msg: any) => {
-    const { level, message, timestamp, ...rest } = msg
-    return `${wrap(getColor(level), level)} | ${message}\n\t${JSONSerializer(rest)}`
 }

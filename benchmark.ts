@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node
 import { performance } from 'perf_hooks'
-import { Logger, LogLevel } from './src'
+import { LogLevel, StandardLogger } from './src'
 
 // test runner
 function run(name: string, fn: () => any, count: number = 1000) {
@@ -23,15 +23,19 @@ function run(name: string, fn: () => any, count: number = 1000) {
     return { name, sum, avg, count }
 }
 
-// setup
-const NullWriter = () => null
-const logger = new Logger({ level: LogLevel.INFO, write: NullWriter })
+// return a random log level
+const keys = Object.keys(LogLevel).filter((k) => typeof LogLevel[k as keyof typeof LogLevel] === 'number')
+const randLevel = () => {
+    const index = Math.floor(Math.random() * keys.length)
+    return LogLevel[keys[index] as keyof typeof LogLevel]
+}
 
 // run tests
 ;[
-    run('simple', () => logger.info('hi')),
-    run('error', () => logger.info('hi', { error: new Error('fail') })),
-    run('extra', () => logger.info('hi', { extra: 'abcd' })),
-    run('with simple', () => logger.with({ with: 'abcd' }).info('hi')),
-    run('with extra', () => logger.with({ with: 'abcd' }).info('hi', { extra: 'abcd' })),
+    run('simple', () => StandardLogger.info( 'hi')),
+    run('error', () => StandardLogger.info( 'hi', { error: new Error('fail') })),
+    run('extra', () => StandardLogger.info( 'hi', { extra: 'abcd' })),
+    run('with simple', () => StandardLogger.with({ with: 'abcd' }).info( 'hi')),
+    run('with extra', () => StandardLogger.with({ with: 'abcd' }).info( 'hi', { extra: 'abcd' })),
+    run('rainbow level', () => StandardLogger.log( randLevel(), 'thing', { extra: 'abcd' })),
 ].forEach((a) => console.log(a))
