@@ -134,7 +134,6 @@ A Serializer takes anything and returns a string.
 Interface:
 
 ```js
-import { Serializer } from 'dexlog'
 export type Serializer = (msg: any) => string
 ```
 
@@ -184,5 +183,5 @@ const logger = new Logger(LogLevel.DEBUG, StdOutWriter, DefaultSerializer, [
 ])
 
 // usage
-logger.info('Hello, sir') // {"message":"Hello, World!","level":"INFO","time":"6/23/2020","foo":"bar"}
+logger.info('Hello, World!') // {"message":"Hello, World!","level":"INFO","time":"6/23/2020","foo":"bar"}
 ```
