@@ -21,21 +21,37 @@ export type Serializer = (msg: any) => string
 // Stamper allows extention of the log event, you can sumply any number of stampers which will all apply their stamp to a message
 export type Stamper = () => any
 
+// Options contain all the required parts of the Logger
+export type Options = {
+    level: LogLevel
+    serialize: Serializer
+    stamps: Stamper[]
+    write: Writer
+}
+
+// Parameters provides a way to instantiate a Logger with only some of the required parts
+export interface Parameters extends Partial<Options> {}
+
+// DefaultOptions declares the default options for a Logger
+export const DefaultOptions: Options = {
+    level: LogLevel.INFO,
+    serialize: JSONSerializer,
+    stamps: [RFC3339Stamper],
+    write: StdOutWriter,
+}
+
 // Logger class allows consumer to instantiate a logger with any given level / writer
 export class Logger {
     // context holds any extra data to include in all logs from this logger
     private context: any
-
-    constructor(
-        private readonly _level: LogLevel = LogLevel.INFO,
-        private readonly write: Writer = StdOutWriter,
-        private readonly serialize: Serializer = JSONSerializer,
-        private readonly stamps: Stamper[] = [RFC3339Stamper],
-    ) {}
+    public readonly options: Options
+    constructor(params: Parameters) {
+        this.options = { ...DefaultOptions, ...params }
+    }
 
     // getters
-    public get level() {
-        return this._level
+    public get level(): LogLevel {
+        return this.options.level
     }
 
     // log level functions
@@ -58,7 +74,7 @@ export class Logger {
             return
         }
 
-        const stamps = this.stamps.reduce((agg, fn) => {
+        const stamps = this.options.stamps.reduce((agg, fn) => {
             agg = { ...fn(), ...agg }
             return agg
         }, {})
@@ -71,12 +87,12 @@ export class Logger {
             ...extra,
         }
 
-        this.write(this.serialize(log))
+        this.options.write(this.options.serialize(log))
     }
 
     // create a new logger, copy this loggers context merged with any new context
     public with(context: any): Logger {
-        const l = new Logger(this.level, this.write, this.serialize, this.stamps)
+        const l = new Logger(this.options)
         l.context = { ...this.context, ...context }
         return l
     }

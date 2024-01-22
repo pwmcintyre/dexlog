@@ -1,5 +1,6 @@
+#!/usr/bin/env -S npx ts-node
 import { performance } from 'perf_hooks'
-import Logger, { LogLevel } from './src'
+import { Logger, LogLevel } from './src'
 
 // test runner
 function run(name: string, fn: () => any, count: number = 1000) {
@@ -24,7 +25,7 @@ function run(name: string, fn: () => any, count: number = 1000) {
 
 // setup
 const NullWriter = () => null
-const logger = new Logger(LogLevel.INFO, NullWriter)
+const logger = new Logger({ level: LogLevel.INFO, write: NullWriter })
 
 // run tests
 ;[
